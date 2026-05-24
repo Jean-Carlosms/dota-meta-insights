@@ -1,5 +1,13 @@
 const DEFAULT_METRIC = 'metaScore';
-const VALID_METRICS = ['metaScore', 'winRate', 'pickRate', 'matches'];
+const VALID_METRICS = [
+  'metaScore',
+  'winRate',
+  'pickRate',
+  'matches',
+  'confidenceScore',
+  'ratingScore',
+  'contestRateApprox'
+];
 const POSITION_KEYS = ['carry', 'mid', 'offlane', 'soft_support', 'hard_support'];
 const TIER_KEYS = ['S', 'A', 'B', 'C', 'D'];
 const MIN_LIMIT = 1;
@@ -74,5 +82,18 @@ export function getRankingOptions({ metric, limit, position } = {}) {
     metric: normalizeMetric(metric),
     limit: normalizeLimit(limit),
     position: position || null
+  };
+}
+
+export function getHeroMetricsSummary(heroes) {
+  return {
+    totalHeroes: heroes.length,
+    bestByMetaScore: getTopHeroes(heroes, 'metaScore', 1)[0] || null,
+    bestByWinRate: getTopHeroes(heroes, 'winRate', 1)[0] || null,
+    bestByPickRate: getTopHeroes(heroes, 'pickRate', 1)[0] || null,
+    mostPlayed: getTopHeroes(heroes, 'matches', 1)[0] || null,
+    highestConfidence: getTopHeroes(heroes, 'confidenceScore', 1)[0] || null,
+    tierDistribution: getTierDistribution(heroes),
+    positionLeaders: getBestHeroesByPosition(heroes)
   };
 }

@@ -8,6 +8,7 @@
 - Improved responsive behavior for filters, cards, tables and charts.
 - Added public README structure, contribution notes and screenshot placeholders.
 - Added chart code splitting and final visual polish for portfolio presentation.
+- Added competitive analytics polish with metric tabs, Top 20 ranking, derived DotaMeta indicators and dark dashboard styling.
 
 ## [0.3.0] - Analytics dashboard
 

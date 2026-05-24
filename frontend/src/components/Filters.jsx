@@ -1,6 +1,7 @@
 const tiers = ['all', 'S', 'A', 'B', 'C', 'D'];
 const attributes = ['all', 'str', 'agi', 'int'];
 const attackTypes = ['all', 'Melee', 'Ranged'];
+const minimumMatchesOptions = ['0', '500', '1000', '5000', '10000'];
 const positions = [
   ['all', 'Todas as posicoes'],
   ['carry', 'Carry'],
@@ -22,24 +23,24 @@ export default function Filters({ filters, onChange, positionFilter, onPositionC
     <section className="filters-panel" aria-label="Filtros de herois">
       <div className="filters-heading">
         <div>
-          <h2>Controle do meta</h2>
-          <p>Filtre por funcao, tier e estatisticas para comparar herois com mais contexto.</p>
+          <h2>Analytics filters</h2>
+          <p>Compact controls for hero, position, tier, role traits and sample size.</p>
         </div>
       </div>
 
       <div className="filters">
         <label className="search-filter">
-          Busca
+          Search hero
           <input
             type="search"
-            placeholder="Buscar heroi"
+            placeholder="Search hero"
             value={filters.search}
             onChange={(event) => updateFilter('search', event.target.value)}
           />
         </label>
 
         <label>
-          Posicao
+          Position
           <select value={positionFilter} onChange={(event) => onPositionChange(event.target.value)}>
             {positions.map(([value, label]) => (
               <option key={value} value={value}>
@@ -61,7 +62,7 @@ export default function Filters({ filters, onChange, positionFilter, onPositionC
         </label>
 
         <label>
-          Atributo
+          Primary Attribute
           <select
             value={filters.primaryAttr}
             onChange={(event) => updateFilter('primaryAttr', event.target.value)}
@@ -75,7 +76,7 @@ export default function Filters({ filters, onChange, positionFilter, onPositionC
         </label>
 
         <label>
-          Ataque
+          Attack Type
           <select
             value={filters.attackType}
             onChange={(event) => updateFilter('attackType', event.target.value)}
@@ -89,12 +90,28 @@ export default function Filters({ filters, onChange, positionFilter, onPositionC
         </label>
 
         <label>
-          Ordenar por
+          Sort By
           <select value={filters.sortBy} onChange={(event) => updateFilter('sortBy', event.target.value)}>
             <option value="metaScore">Meta Score</option>
             <option value="winRate">Win Rate</option>
             <option value="pickRate">Pick Rate</option>
             <option value="matches">Matches</option>
+            <option value="confidenceScore">Confidence</option>
+            <option value="ratingScore">DotaMeta Rating</option>
+          </select>
+        </label>
+
+        <label>
+          Minimum Matches
+          <select
+            value={filters.minimumMatches}
+            onChange={(event) => updateFilter('minimumMatches', event.target.value)}
+          >
+            {minimumMatchesOptions.map((value) => (
+              <option key={value} value={value}>
+                {new Intl.NumberFormat('pt-BR').format(Number(value))}
+              </option>
+            ))}
           </select>
         </label>
       </div>

@@ -111,6 +111,18 @@ export function getSampleSizeLabel(matches) {
   return 'High sample';
 }
 
+export function calculateContestRateApprox(pickRate) {
+  return round(pickRate);
+}
+
+export function calculateRatingScore(metaScore, confidenceScore) {
+  return round(metaScore * 0.75 + confidenceScore * 0.25, 1);
+}
+
+export function calculateLanePresenceApprox() {
+  return null;
+}
+
 export function buildMetaPayload(rawHeroes, updatedAt) {
   const preparedHeroes = rawHeroes
     .filter((hero) => hero?.id && hero?.localized_name)
@@ -172,7 +184,10 @@ export function buildMetaPayload(rawHeroes, updatedAt) {
       return {
         ...hero,
         confidenceScore: calculateConfidenceScore(hero.matches, maxMatches),
+        contestRateApprox: calculateContestRateApprox(hero.pickRate),
         metaScore,
+        ratingScore: calculateRatingScore(metaScore, calculateConfidenceScore(hero.matches, maxMatches)),
+        lanePresenceApprox: calculateLanePresenceApprox(hero),
         tier: classifyTier(metaScore)
       };
     })

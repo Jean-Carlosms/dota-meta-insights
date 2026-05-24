@@ -22,18 +22,26 @@ export default function HeroTable({ heroes }) {
     <div className="table-shell">
       <table>
         <thead>
+          <tr className="table-group-row">
+            <th colSpan="5">Hero</th>
+            <th colSpan="4">Meta Stats</th>
+            <th colSpan="2">Reliability</th>
+            <th colSpan="2">Classification</th>
+          </tr>
           <tr>
             <th>Tier</th>
             <th>Heroi</th>
             <th>Posicao</th>
             <th>Atributo primario</th>
             <th>Tipo de ataque</th>
-            <th>Roles</th>
             <th>Matches</th>
             <th>Win Rate</th>
             <th>Pick Rate</th>
             <th>Meta Score</th>
             <th>Confianca</th>
+            <th>Sample Size</th>
+            <th>Roles</th>
+            <th>Tier</th>
           </tr>
         </thead>
         <tbody>
@@ -62,13 +70,6 @@ export default function HeroTable({ heroes }) {
               </td>
               <td>{hero.primaryAttr?.toUpperCase()}</td>
               <td>{hero.attackType}</td>
-              <td>
-                <div className="role-list">
-                  {hero.roles.map((role) => (
-                    <span key={role}>{role}</span>
-                  ))}
-                </div>
-              </td>
               <td>{formatNumber(hero.matches)}</td>
               <td>{hero.winRate.toFixed(2)}%</td>
               <td>{hero.pickRate.toFixed(2)}%</td>
@@ -77,7 +78,19 @@ export default function HeroTable({ heroes }) {
               </td>
               <td>
                 <strong>{(hero.confidenceScore || 0).toFixed(1)}%</strong>
-                <span className="hero-code">{hero.sampleSizeLabel || '-'}</span>
+              </td>
+              <td>
+                <span className="sample-pill">{hero.sampleSizeLabel || '-'}</span>
+              </td>
+              <td>
+                <div className="role-list compact">
+                  {hero.roles.map((role) => (
+                    <span key={role}>{role}</span>
+                  ))}
+                </div>
+              </td>
+              <td>
+                <HeroTierBadge tier={hero.tier} />
               </td>
             </tr>
           ))}

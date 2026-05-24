@@ -3,6 +3,7 @@ import test from 'node:test';
 import {
   getBestHeroesByPosition,
   getHeroById,
+  getHeroMetricsSummary,
   getTierDistribution,
   getTopHeroes
 } from '../src/services/ranking.service.js';
@@ -16,7 +17,9 @@ const heroes = [
     metaScore: 72,
     winRate: 52,
     pickRate: 8,
-    matches: 10000
+    matches: 10000,
+    confidenceScore: 83,
+    ratingScore: 74.8
   },
   {
     id: 2,
@@ -26,7 +29,9 @@ const heroes = [
     metaScore: 64,
     winRate: 55,
     pickRate: 5,
-    matches: 7000
+    matches: 7000,
+    confidenceScore: 58,
+    ratingScore: 62.5
   },
   {
     id: 3,
@@ -36,7 +41,9 @@ const heroes = [
     metaScore: 84,
     winRate: 53,
     pickRate: 10,
-    matches: 12000
+    matches: 12000,
+    confidenceScore: 100,
+    ratingScore: 88
   }
 ];
 
@@ -75,4 +82,17 @@ test('getBestHeroesByPosition returns one leader per known position', () => {
   assert.equal(result.carry.localizedName, 'Anti-Mage');
   assert.equal(result.mid.localizedName, 'Puck');
   assert.equal(result.hard_support, null);
+});
+
+test('getHeroMetricsSummary returns dashboard metric leaders', () => {
+  const result = getHeroMetricsSummary(heroes);
+
+  assert.equal(result.totalHeroes, 3);
+  assert.equal(result.bestByMetaScore.localizedName, 'Puck');
+  assert.equal(result.bestByWinRate.localizedName, 'Axe');
+  assert.equal(result.bestByPickRate.localizedName, 'Puck');
+  assert.equal(result.mostPlayed.localizedName, 'Puck');
+  assert.equal(result.highestConfidence.localizedName, 'Puck');
+  assert.equal(result.tierDistribution.S, 1);
+  assert.equal(result.positionLeaders.mid.localizedName, 'Puck');
 });

@@ -3,6 +3,7 @@ import { getHeroMeta } from '../jobs/updateMeta.job.js';
 import {
   getBestHeroesByPosition,
   getHeroById,
+  getHeroMetricsSummary,
   getRankingOptions,
   getTierDistribution,
   getTopHeroes,
@@ -37,7 +38,7 @@ router.get('/top', async (req, res, next) => {
       throw createHttpError(
         'Invalid ranking metric',
         400,
-        'Use one of: metaScore, winRate, pickRate, matches'
+        'Use one of: metaScore, winRate, pickRate, matches, confidenceScore, ratingScore, contestRateApprox'
       );
     }
 
@@ -85,6 +86,20 @@ router.get('/tiers', async (req, res, next) => {
   try {
     const payload = await getHeroMeta();
     res.json(getTierDistribution(payload.heroes));
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/metrics', async (req, res, next) => {
+  try {
+    const payload = await getHeroMeta();
+
+    res.json({
+      updatedAt: payload.updatedAt,
+      source: payload.source,
+      ...getHeroMetricsSummary(payload.heroes)
+    });
   } catch (error) {
     next(error);
   }

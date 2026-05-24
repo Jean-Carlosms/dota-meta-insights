@@ -131,8 +131,18 @@ export default function HeroDetail() {
         </div>
         <div className="highlight-grid">
           <HighlightMetric label="Meta Score" value={hero.metaScore.toFixed(1)} helper={`Tier ${hero.tier}`} />
+          <HighlightMetric
+            label="DotaMeta Rating"
+            value={(hero.ratingScore || 0).toFixed(1)}
+            helper="Meta Score + confidence"
+          />
           <HighlightMetric label="Win Rate" value={`${hero.winRate.toFixed(2)}%`} helper="Wins over matches" />
           <HighlightMetric label="Pick Rate" value={`${hero.pickRate.toFixed(2)}%`} helper="Approximate share" />
+          <HighlightMetric
+            label="Contest Approx"
+            value={`${(hero.contestRateApprox || 0).toFixed(2)}%`}
+            helper="Derived from pick rate"
+          />
           <HighlightMetric
             label="Confidence"
             value={`${(hero.confidenceScore || 0).toFixed(1)}%`}
@@ -170,6 +180,8 @@ export default function HeroDetail() {
         <p>
           OpenDota is the main public data source in this version. Positions are inferred by
           heuristic from hero roles, not measured from real match lanes or position assignments.
+          Contest Approx and DotaMeta Rating are derived indicators, not Dota2ProTracker metrics.
+          Lane presence remains planned because this payload does not include real lane data.
           Future STRATZ GraphQL integration can enrich this page with real position data, patch,
           rank, trends, and builds by role.
         </p>

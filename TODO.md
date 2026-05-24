@@ -20,6 +20,8 @@
 
 - Integrate STRATZ GraphQL API with token configuration.
 - Replace or validate position heuristic with real match-level position data.
+- Add real lane advantage.
+- Add real pick/ban contest rate.
 - Add patch-aware queries.
 - Add rank/bracket-aware queries.
 - Keep OpenDota fallback behavior documented.
@@ -30,6 +32,8 @@
 - Add temporal trend analysis.
 - Add trend charts.
 - Add builds by position.
+- Add hero icons from a safe source.
+- Add matchups.
 - Add counters, synergies and best allies.
 - Compare Meta Score between periods.
 - Persist historical data in SQLite or PostgreSQL.

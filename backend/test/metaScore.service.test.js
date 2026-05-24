@@ -2,8 +2,11 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   calculateConfidenceScore,
+  calculateContestRateApprox,
+  calculateRatingScore,
   calculateWinRate,
   classifyTier,
+  calculateLanePresenceApprox,
   getSampleSizeLabel
 } from '../src/services/metaScore.service.js';
 
@@ -26,4 +29,10 @@ test('confidence and sample size are based on match volume', () => {
   assert.equal(getSampleSizeLabel(999), 'Low sample');
   assert.equal(getSampleSizeLabel(1000), 'Medium sample');
   assert.equal(getSampleSizeLabel(10001), 'High sample');
+});
+
+test('derived analytics metrics are explicit approximations', () => {
+  assert.equal(calculateContestRateApprox(8.456), 8.46);
+  assert.equal(calculateRatingScore(80, 60), 75);
+  assert.equal(calculateLanePresenceApprox(), null);
 });

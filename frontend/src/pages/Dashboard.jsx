@@ -11,16 +11,25 @@ const TopMetaScoreChart = lazy(() => import('../components/charts/TopMetaScoreCh
 const TopWinRateChart = lazy(() => import('../components/charts/TopWinRateChart.jsx'));
 const TierDistributionChart = lazy(() => import('../components/charts/TierDistributionChart.jsx'));
 const PositionLeadersChart = lazy(() => import('../components/charts/PositionLeadersChart.jsx'));
+const HeroMetricRankingChart = lazy(() => import('../components/charts/HeroMetricRankingChart.jsx'));
 
 const initialFilters = {
   search: '',
   tier: 'all',
   primaryAttr: 'all',
   attackType: 'all',
-  sortBy: 'metaScore'
+  sortBy: 'metaScore',
+  minimumMatches: '0'
 };
 
 const positionKeys = ['carry', 'mid', 'offlane', 'soft_support', 'hard_support'];
+const metricTabs = [
+  ['metaScore', 'Meta Score'],
+  ['winRate', 'Win Rate'],
+  ['pickRate', 'Pick Rate'],
+  ['matches', 'Matches'],
+  ['confidenceScore', 'Confidence']
+];
 
 function formatDate(value) {
   if (!value) return '-';
@@ -35,6 +44,7 @@ export default function Dashboard() {
   const [payload, setPayload] = useState(null);
   const [filters, setFilters] = useState(initialFilters);
   const [positionFilter, setPositionFilter] = useState('all');
+  const [selectedMetric, setSelectedMetric] = useState('metaScore');
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState('');
@@ -61,6 +71,7 @@ export default function Dashboard() {
   const filteredHeroes = useMemo(() => {
     const heroes = payload?.heroes || [];
     const search = filters.search.trim().toLowerCase();
+    const minimumMatches = Number(filters.minimumMatches) || 0;
 
     return heroes
       .filter((hero) => {
@@ -75,11 +86,20 @@ export default function Dashboard() {
           filters.attackType === 'all' || hero.attackType === filters.attackType;
         const matchesPosition =
           positionFilter === 'all' || (hero.positions || []).includes(positionFilter);
+        const matchesMinimum = hero.matches >= minimumMatches;
 
-        return matchesSearch && matchesTier && matchesAttr && matchesAttack && matchesPosition;
+        return matchesSearch && matchesTier && matchesAttr && matchesAttack && matchesPosition && matchesMinimum;
       })
       .sort((a, b) => b[filters.sortBy] - a[filters.sortBy]);
   }, [payload, filters, positionFilter]);
+
+  function selectMetric(metric) {
+    setSelectedMetric(metric);
+    setFilters((currentFilters) => ({
+      ...currentFilters,
+      sortBy: metric
+    }));
+  }
 
   const summary = useMemo(() => {
     const heroes = payload?.heroes || [];
@@ -146,6 +166,44 @@ export default function Dashboard() {
         />
       ) : (
         <>
+          <section className="meta-overview">
+            <div className="section-heading">
+              <div>
+                <h2>Meta Overview</h2>
+                <p>Switch the active metric to update the main ranking and table order.</p>
+              </div>
+            </div>
+
+            <div className="metric-tabs" role="tablist" aria-label="Metric selector">
+              {metricTabs.map(([metric, label]) => (
+                <button
+                  key={metric}
+                  className={selectedMetric === metric ? 'active' : ''}
+                  type="button"
+                  onClick={() => selectMetric(metric)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            <Suspense
+              fallback={
+                <StatusMessage
+                  type="loading"
+                  title="Loading charts"
+                  message="Preparing the main ranking."
+                />
+              }
+            >
+              <HeroMetricRankingChart
+                heroes={filteredHeroes}
+                metric={selectedMetric}
+                metricLabel={metricTabs.find(([metric]) => metric === selectedMetric)?.[1] || 'Meta Score'}
+              />
+            </Suspense>
+          </section>
+
           <section className="summary-grid">
             <HeroCard label="Herois analisados" value={summary.totalHeroes} detail={payload?.source} />
             <HeroCard
@@ -232,6 +290,17 @@ export default function Dashboard() {
               dashboard, and portfolio project. It does not scrape STRATZ, Dota2ProTracker, or any
               third-party website.
             </p>
+          </section>
+
+          <section className="data-notes">
+            <h2>Data notes</h2>
+            <ul>
+              <li>OpenDota is the current data source.</li>
+              <li>Positions are inferred from hero roles.</li>
+              <li>Contest Rate and DotaMeta Rating are derived indicators.</li>
+              <li>No scraping is used.</li>
+              <li>STRATZ GraphQL integration is planned for more accurate position, patch and rank analytics.</li>
+            </ul>
           </section>
 
           <Filters

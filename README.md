@@ -15,6 +15,7 @@ DotaMeta Insights e um dashboard de portfolio para analisar o meta de herois de 
 - Position filter using explicit heuristics from OpenDota `roles`.
 - Filters by hero name, tier, position, primary attribute, attack type and sort metric.
 - Recharts visualizations:
+  - Top 20 compact ranking by active metric.
   - Top 10 heroes by Meta Score.
   - Top 10 heroes by Win Rate with minimum match volume.
   - Tier distribution.
@@ -22,6 +23,7 @@ DotaMeta Insights e um dashboard de portfolio para analisar o meta de herois de 
 - Hero detail page at `/heroes/:heroId`.
 - Backend helper endpoints for rankings, positions, tiers and hero lookup.
 - `confidenceScore` and `sampleSizeLabel` to communicate sample reliability.
+- `ratingScore`, `contestRateApprox` and `lanePresenceApprox` as documented DotaMeta indicators.
 - Basic backend tests with `node:test`.
 - Root scripts for install, dev, build, test and check.
 
@@ -156,7 +158,7 @@ Forces a new OpenDota request, updates the local cache and returns processed dat
 
 Optional query params:
 
-- `metric=metaScore|winRate|pickRate|matches`
+- `metric=metaScore|winRate|pickRate|matches|confidenceScore|ratingScore|contestRateApprox`
 - `limit=10`
 - `position=carry|mid|offlane|soft_support|hard_support`
 
@@ -183,6 +185,23 @@ Returns tier distribution:
 ### GET /api/heroes/:id
 
 Returns one hero by id. Unknown ids return `404`.
+
+### GET /api/heroes/metrics
+
+Returns the main dashboard metric leaders:
+
+```json
+{
+  "totalHeroes": 124,
+  "bestByMetaScore": {},
+  "bestByWinRate": {},
+  "bestByPickRate": {},
+  "mostPlayed": {},
+  "highestConfidence": {},
+  "tierDistribution": {},
+  "positionLeaders": {}
+}
+```
 
 ## Meta Score Formula
 
@@ -230,6 +249,17 @@ Future STRATZ GraphQL integration can replace or validate these heuristics with 
 
 This does not change Meta Score; it helps interpret how reliable the sample size is.
 
+## DotaMeta Analytics Layer
+
+The project adds a small analytics layer on top of OpenDota data. These fields are internal DotaMeta indicators, not official Dota 2, STRATZ or Dota2ProTracker metrics.
+
+- `ratingScore`: DotaMeta Rating. Formula: `metaScore * 0.75 + confidenceScore * 0.25`.
+- `contestRateApprox`: initial contest approximation using `pickRate` as the base. It is not a real pick/ban contest rate.
+- `lanePresenceApprox`: currently `null` because OpenDota `heroStats` does not provide real lane presence. This is planned for future STRATZ GraphQL work.
+- Minimum matches filter: frontend filter that hides heroes below the selected match threshold (`0`, `500`, `1000`, `5000`, `10000`).
+
+Dota2ProTracker was used only as product inspiration for dense competitive analysis patterns such as compact metric tabs, ranking charts, filters and table density. This project does not scrape it, copy its CSS/HTML, or use its assets.
+
 ## Error Format
 
 API errors follow this shape:
@@ -260,6 +290,8 @@ Latest local audit in this round:
 - No private data is used.
 - No database is used yet.
 - Position is inferred by heuristic, not measured from real matches.
+- Contest Rate and DotaMeta Rating are derived indicators, not official external metrics.
+- Lane presence is planned and intentionally returns `null` until a reliable source is integrated.
 - No STRATZ integration is active yet.
 - Cache is local JSON and intended for local/portfolio use.
 
@@ -268,6 +300,9 @@ Latest local audit in this round:
 - Integrate STRATZ GraphQL for real position data.
 - Add patch and rank filters.
 - Add temporal trend history.
+- Add real pick/ban and lane advantage data.
+- Add hero icons from a safe source.
+- Add matchups.
 - Add builds by position.
 - Add counters, synergies and best allies.
 - Add screenshots.

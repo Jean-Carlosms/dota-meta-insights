@@ -63,3 +63,19 @@ APIs publicas sao otimas para MVP e portfolio, mas nem sempre trazem contexto su
 ## Auditoria de dependencias
 
 O backend auditou sem vulnerabilidades. O frontend apresentou 2 vulnerabilidades moderadas no caminho `vite -> esbuild`. A correcao automatica exige `npm audit fix --force`, que instalaria uma versao maior e potencialmente quebravel do Vite, entao a recomendacao atual e planejar upgrade controlado.
+
+## Referencia de produto vs copia visual
+
+Uma referencia como Dota2ProTracker pode inspirar densidade de informacao, metric tabs, ranking compacto e leitura competitiva. Isso e diferente de copiar layout, CSS, HTML, assets ou coletar dados por scraping.
+
+## Risco de inventar metrica
+
+Quando a API publica nao entrega pick/ban, lane advantage ou posicao real, o projeto precisa evitar nomes que parecam dados oficiais. Indicadores derivados devem ter nomes proprios e documentacao clara.
+
+## Metricas derivadas documentadas
+
+`DotaMeta Rating` combina Meta Score e confidenceScore. `contestRateApprox` usa pickRate como aproximacao inicial. `lanePresenceApprox` permanece `null` ate existir fonte confiavel. Essa transparencia torna o dashboard mais honesto.
+
+## Dashboards densos para analise competitiva
+
+Dashboards competitivos precisam equilibrar densidade e legibilidade: filtros compactos, ranking principal, tabela com grupos de colunas e notas de dados ajudam o usuario a entender o que e medido, derivado ou planejado.

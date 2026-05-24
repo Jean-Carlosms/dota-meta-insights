@@ -741,3 +741,282 @@ tbody tr:hover {
     min-height: auto;
   }
 }
+
+/* Competitive dark dashboard polish */
+:root {
+  color: #e8f1fb;
+  background: #08111f;
+}
+
+body {
+  background:
+    radial-gradient(circle at 10% 0%, rgba(52, 211, 153, 0.12), transparent 28rem),
+    radial-gradient(circle at 90% 0%, rgba(59, 130, 246, 0.13), transparent 30rem),
+    linear-gradient(180deg, #0b1424 0%, #08111f 44%, #070d18 100%);
+}
+
+.hero-header,
+.detail-header,
+.summary-card,
+.position-card,
+.filters-panel,
+.chart-card,
+.chart-empty,
+.about-project,
+.data-notes,
+.detail-stat,
+.detail-panel,
+.highlight-metric,
+.metric-ranking-card,
+.table-shell {
+  border-color: #213149;
+  background: linear-gradient(180deg, rgba(17, 27, 43, 0.96), rgba(12, 20, 34, 0.96));
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.22);
+}
+
+.hero-header {
+  background:
+    linear-gradient(135deg, rgba(18, 30, 48, 0.98), rgba(11, 23, 38, 0.98)),
+    #111b2b;
+}
+
+h1,
+.summary-card strong,
+.position-card strong,
+.section-heading h2,
+.filters-heading h2,
+.chart-card h3,
+.detail-stat strong,
+.detail-panel h2,
+.highlight-metric strong,
+.about-project h2,
+.data-notes h2,
+.metric-ranking-header h3,
+.status-message strong {
+  color: #f3f8ff;
+}
+
+.hero-header p,
+.section-heading p,
+.filters-heading p,
+.summary-card small,
+.summary-card span,
+.position-card-label,
+.about-project p,
+.data-notes li,
+.detail-header p,
+.detail-panel p,
+.chart-note,
+.metric-ranking-header p,
+.highlight-metric span,
+.highlight-metric small,
+.detail-stat span {
+  color: #8ea4bf;
+}
+
+.eyebrow,
+.header-note {
+  color: #67e8f9;
+}
+
+.refresh-button,
+.status-message button {
+  background: linear-gradient(135deg, #0891b2, #10b981);
+  box-shadow: 0 12px 26px rgba(16, 185, 129, 0.18);
+}
+
+.meta-overview,
+.charts-section,
+.position-leaders {
+  margin-bottom: 24px;
+}
+
+.metric-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.metric-tabs button {
+  border: 1px solid #213149;
+  border-radius: 8px;
+  padding: 9px 12px;
+  color: #8ea4bf;
+  background: #101b2b;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.metric-tabs button.active,
+.metric-tabs button:hover {
+  border-color: #22d3ee;
+  color: #e8f1fb;
+  background: rgba(34, 211, 238, 0.12);
+}
+
+.metric-ranking-card {
+  min-height: 430px;
+  padding: 18px;
+  border: 1px solid #213149;
+  border-radius: 8px;
+}
+
+.metric-ranking-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.metric-ranking-header h3,
+.metric-ranking-header p {
+  margin: 0;
+}
+
+.metric-ranking-header p {
+  margin-top: 5px;
+  font-size: 0.86rem;
+}
+
+.chart-dark {
+  background: #101827;
+}
+
+.filters input,
+.filters select {
+  border-color: #263852;
+  color: #e8f1fb;
+  background: #0d1727;
+}
+
+.filters input::placeholder {
+  color: #647895;
+}
+
+.filters input:focus,
+.filters select:focus {
+  border-color: #22d3ee;
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.12);
+}
+
+table {
+  min-width: 1500px;
+}
+
+th {
+  color: #8ea4bf;
+  background: #0d1727;
+}
+
+td {
+  color: #d7e2ef;
+  background: rgba(13, 23, 39, 0.38);
+}
+
+tbody tr:hover td {
+  background: rgba(34, 211, 238, 0.08);
+}
+
+.table-group-row th {
+  border-bottom: 1px solid #263852;
+  color: #67e8f9;
+  background: #0a1321;
+  font-size: 0.72rem;
+}
+
+.hero-link {
+  color: #f3f8ff;
+}
+
+.hero-link:hover {
+  color: #67e8f9;
+}
+
+.hero-code {
+  color: #647895;
+}
+
+.role-list.compact {
+  max-width: 420px;
+}
+
+.role-list span,
+.position-card-stats span,
+.sample-pill {
+  border: 1px solid #263852;
+  color: #a9bdd5;
+  background: #101b2b;
+}
+
+.sample-pill {
+  display: inline-flex;
+  border-radius: 999px;
+  padding: 4px 8px;
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+.tier-badge {
+  width: 32px;
+  height: 32px;
+  font-size: 0.86rem;
+}
+
+.position-badge {
+  border-color: #263852;
+  background: #101b2b;
+}
+
+.position-carry {
+  color: #fca5a5;
+}
+
+.position-mid {
+  color: #93c5fd;
+}
+
+.position-offlane {
+  color: #86efac;
+}
+
+.position-soft_support {
+  color: #fde68a;
+}
+
+.position-hard_support {
+  color: #c4b5fd;
+}
+
+.status-info,
+.status-loading {
+  border-color: #213149;
+  color: #8ea4bf;
+  background: #111b2b;
+}
+
+.status-error {
+  border-color: #7f1d1d;
+  color: #fecaca;
+  background: #2b1118;
+}
+
+.status-warning,
+.detail-limitations {
+  border-color: #7c4a16;
+  color: #fed7aa;
+  background: #24180d;
+}
+
+.back-link {
+  border-color: #164e63;
+  color: #67e8f9;
+  background: rgba(34, 211, 238, 0.1);
+}
+
+.data-notes ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 18px;
+}
