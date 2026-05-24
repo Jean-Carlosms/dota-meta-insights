@@ -80,6 +80,30 @@ Quando a API publica nao entrega pick/ban, lane advantage ou posicao real, o pro
 
 Dashboards competitivos precisam equilibrar densidade e legibilidade: filtros compactos, ranking principal, tabela com grupos de colunas e notas de dados ajudam o usuario a entender o que e medido, derivado ou planejado.
 
+## Dashboard administrativo vs competitivo
+
+Um dashboard administrativo privilegia respiro e leitura ampla. Um dashboard competitivo precisa mostrar mais sinais por tela: colunas agrupadas, linhas compactas, metric bars e filtros densos ajudam a comparar herois rapidamente.
+
+## Mini barras e densidade de tabela
+
+Mini barras em celulas numericas permitem comparar volume e score sem adicionar graficos pesados. A densidade ajustavel deixa o usuario escolher entre leitura confortavel e analise compacta.
+
+## Cuidado para nao copiar outro produto
+
+Usar Dota2ProTracker como referencia significa observar padroes de produto, como densidade e agrupamento de metricas. Nao significa copiar CSS, HTML, assets, layout exato ou dados.
+
+## Dados corretos importam mais do que visual
+
+Um dashboard pode parecer competitivo, mas se a fonte for geral, o resultado continua sendo general meta. High MMR, periodo recente, patch e posicao real mudam completamente a leitura.
+
+## Dashboard bonito vs representativo
+
+Visual denso ajuda a comparar herois, mas representatividade estatistica vem da segmentacao correta. OpenDota `heroStats` e bom para analise publica geral; dados competitivos exigem fonte adequada.
+
+## Segmentacao muda rankings
+
+Filtrar por MMR, periodo e posicao pode inverter rankings. Por isso o projeto separa `General Meta` de `Competitive Meta Preview` e evita chamar dados gerais de meta pro real.
+
 ## Assets externos com fallback
 
 Os icones e imagens dos herois usam caminhos publicos retornados pela OpenDota. O frontend precisa lidar com falha de imagem e ausencia de URL usando fallback textual para manter a interface estavel.

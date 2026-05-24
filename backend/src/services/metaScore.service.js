@@ -29,6 +29,27 @@ const WIN_KEYS = [
   'pro_win'
 ];
 
+const SCORE_PROFILES = {
+  balanced: {
+    winRate: 0.5,
+    pickRate: 0.2,
+    confidence: 0.2,
+    volume: 0.1
+  },
+  winrate_focused: {
+    winRate: 0.65,
+    pickRate: 0.15,
+    confidence: 0.15,
+    volume: 0.05
+  },
+  confidence_focused: {
+    winRate: 0.4,
+    pickRate: 0.2,
+    confidence: 0.3,
+    volume: 0.1
+  }
+};
+
 function toNumber(value) {
   const number = Number(value);
   return Number.isFinite(number) ? number : 0;
@@ -66,11 +87,23 @@ export function normalizeValue(value, min, max) {
   return (value - min) / (max - min);
 }
 
-export function calculateMetaScore({ winRateNormalized, pickRateNormalized, volumeNormalized }) {
+export function getScoreProfileWeights(scoreProfile = 'balanced') {
+  return SCORE_PROFILES[scoreProfile] || SCORE_PROFILES.balanced;
+}
+
+export function calculateMetaScore({
+  winRateNormalized,
+  pickRateNormalized,
+  confidenceNormalized = 0,
+  volumeNormalized,
+  scoreProfile = 'balanced'
+}) {
+  const weights = getScoreProfileWeights(scoreProfile);
   const score =
-    winRateNormalized * 0.55 +
-    pickRateNormalized * 0.3 +
-    volumeNormalized * 0.15;
+    winRateNormalized * weights.winRate +
+    pickRateNormalized * weights.pickRate +
+    confidenceNormalized * weights.confidence +
+    volumeNormalized * weights.volume;
 
   return round(score * 100, 1);
 }
@@ -124,7 +157,8 @@ export function calculateLanePresenceApprox() {
   return null;
 }
 
-export function buildMetaPayload(rawHeroes, updatedAt) {
+export function buildMetaPayload(rawHeroes, updatedAt, options = {}) {
+  const scoreProfile = options.scoreProfile || 'balanced';
   const preparedHeroes = rawHeroes
     .filter((hero) => hero?.id && hero?.localized_name)
     .map((hero) => {
@@ -161,6 +195,7 @@ export function buildMetaPayload(rawHeroes, updatedAt) {
     return {
       updatedAt,
       source: 'OpenDota API',
+      scoreProfile,
       totalHeroes: 0,
       heroes: []
     };
@@ -180,18 +215,21 @@ export function buildMetaPayload(rawHeroes, updatedAt) {
 
   const heroes = heroesWithPickRate
     .map((hero) => {
+      const confidenceScore = calculateConfidenceScore(hero.matches, maxMatches);
       const metaScore = calculateMetaScore({
         winRateNormalized: normalizeValue(hero.winRate, winRateRange.min, winRateRange.max),
         pickRateNormalized: normalizeValue(hero.pickRate, pickRateRange.min, pickRateRange.max),
-        volumeNormalized: normalizeValue(hero.matches, volumeRange.min, volumeRange.max)
+        confidenceNormalized: confidenceScore / 100,
+        volumeNormalized: normalizeValue(hero.matches, volumeRange.min, volumeRange.max),
+        scoreProfile
       });
 
       return {
         ...hero,
-        confidenceScore: calculateConfidenceScore(hero.matches, maxMatches),
+        confidenceScore,
         contestRateApprox: calculateContestRateApprox(hero.pickRate),
         metaScore,
-        ratingScore: calculateRatingScore(metaScore, calculateConfidenceScore(hero.matches, maxMatches)),
+        ratingScore: calculateRatingScore(metaScore, confidenceScore),
         lanePresenceApprox: calculateLanePresenceApprox(hero),
         tier: classifyTier(metaScore)
       };
@@ -201,6 +239,7 @@ export function buildMetaPayload(rawHeroes, updatedAt) {
   return {
     updatedAt,
     source: 'OpenDota API',
+    scoreProfile,
     totalHeroes: heroes.length,
     heroes
   };

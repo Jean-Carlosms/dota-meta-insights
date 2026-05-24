@@ -3,6 +3,7 @@ import test from 'node:test';
 import {
   calculateConfidenceScore,
   calculateContestRateApprox,
+  calculateMetaScore,
   calculateRatingScore,
   calculateWinRate,
   classifyTier,
@@ -35,4 +36,17 @@ test('derived analytics metrics are explicit approximations', () => {
   assert.equal(calculateContestRateApprox(8.456), 8.46);
   assert.equal(calculateRatingScore(80, 60), 75);
   assert.equal(calculateLanePresenceApprox(), null);
+});
+
+test('score profiles apply different analytical weights', () => {
+  const baseInput = {
+    winRateNormalized: 1,
+    pickRateNormalized: 0,
+    confidenceNormalized: 0,
+    volumeNormalized: 0
+  };
+
+  assert.equal(calculateMetaScore({ ...baseInput, scoreProfile: 'balanced' }), 50);
+  assert.equal(calculateMetaScore({ ...baseInput, scoreProfile: 'winrate_focused' }), 65);
+  assert.equal(calculateMetaScore({ ...baseInput, scoreProfile: 'confidence_focused' }), 40);
 });

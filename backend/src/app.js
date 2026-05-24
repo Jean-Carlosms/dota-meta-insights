@@ -1,5 +1,6 @@
 import express from 'express';
 import heroesRoutes from './routes/heroes.routes.js';
+import metaRoutes from './routes/meta.routes.js';
 import { errorMiddleware, notFoundMiddleware } from './middlewares/error.middleware.js';
 
 const app = express();
@@ -27,6 +28,7 @@ app.get('/api/health', (req, res) => {
 });
 
 app.use('/api/heroes', heroesRoutes);
+app.use('/api/meta', metaRoutes);
 
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);

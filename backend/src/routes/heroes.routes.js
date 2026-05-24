@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getHeroMeta } from '../jobs/updateMeta.job.js';
+import { getGeneralMeta } from '../services/dataSources/generalMeta.source.js';
 import {
   getBestHeroesByPosition,
   getHeroById,
@@ -14,9 +14,13 @@ import { createHttpError } from '../middlewares/error.middleware.js';
 
 const router = Router();
 
+function getScoreProfile(req) {
+  return req.query.scoreProfile || 'balanced';
+}
+
 router.get('/meta', async (req, res, next) => {
   try {
-    const payload = await getHeroMeta();
+    const payload = await getGeneralMeta({ scoreProfile: getScoreProfile(req) });
     res.json(payload);
   } catch (error) {
     next(error);
@@ -25,7 +29,7 @@ router.get('/meta', async (req, res, next) => {
 
 router.get('/meta/refresh', async (req, res, next) => {
   try {
-    const payload = await getHeroMeta({ forceRefresh: true });
+    const payload = await getGeneralMeta({ forceRefresh: true, scoreProfile: getScoreProfile(req) });
     res.json(payload);
   } catch (error) {
     next(error);
@@ -50,7 +54,7 @@ router.get('/top', async (req, res, next) => {
       );
     }
 
-    const payload = await getHeroMeta();
+    const payload = await getGeneralMeta({ scoreProfile: getScoreProfile(req) });
     const options = getRankingOptions(req.query);
     const heroes = getTopHeroes(payload.heroes, options.metric, options.limit, options.position);
 
@@ -70,7 +74,7 @@ router.get('/top', async (req, res, next) => {
 
 router.get('/positions', async (req, res, next) => {
   try {
-    const payload = await getHeroMeta();
+    const payload = await getGeneralMeta({ scoreProfile: getScoreProfile(req) });
 
     res.json({
       updatedAt: payload.updatedAt,
@@ -84,7 +88,7 @@ router.get('/positions', async (req, res, next) => {
 
 router.get('/tiers', async (req, res, next) => {
   try {
-    const payload = await getHeroMeta();
+    const payload = await getGeneralMeta({ scoreProfile: getScoreProfile(req) });
     res.json(getTierDistribution(payload.heroes));
   } catch (error) {
     next(error);
@@ -93,7 +97,7 @@ router.get('/tiers', async (req, res, next) => {
 
 router.get('/metrics', async (req, res, next) => {
   try {
-    const payload = await getHeroMeta();
+    const payload = await getGeneralMeta({ scoreProfile: getScoreProfile(req) });
 
     res.json({
       updatedAt: payload.updatedAt,
@@ -107,7 +111,7 @@ router.get('/metrics', async (req, res, next) => {
 
 router.get('/:id', async (req, res, next) => {
   try {
-    const payload = await getHeroMeta();
+    const payload = await getGeneralMeta({ scoreProfile: getScoreProfile(req) });
     const hero = getHeroById(payload.heroes, req.params.id);
 
     if (!hero) {

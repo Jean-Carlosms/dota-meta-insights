@@ -1,4 +1,5 @@
 import { Suspense, lazy, useEffect, useMemo, useState } from 'react';
+import DataSourceNotice from '../components/DataSourceNotice.jsx';
 import Filters from '../components/Filters.jsx';
 import HeroCard from '../components/HeroCard.jsx';
 import HeroPositionBadge, { getPositionLabel } from '../components/HeroPositionBadge.jsx';
@@ -19,7 +20,8 @@ const initialFilters = {
   primaryAttr: 'all',
   attackType: 'all',
   sortBy: 'metaScore',
-  minimumMatches: '0'
+  minimumMatches: '0',
+  scoreProfile: 'balanced'
 };
 
 const positionKeys = ['carry', 'mid', 'offlane', 'soft_support', 'hard_support'];
@@ -30,6 +32,18 @@ const metricTabs = [
   ['matches', 'Matches'],
   ['confidenceScore', 'Confidence']
 ];
+const dataSourceModes = [
+  ['general', 'General Meta'],
+  ['competitive_preview', 'Competitive Meta Preview']
+];
+
+function getInitialTableDensity() {
+  if (typeof window === 'undefined') {
+    return 'compact';
+  }
+
+  return window.localStorage.getItem('dmi-table-density') || 'compact';
+}
 
 function formatDate(value) {
   if (!value) return '-';
@@ -45,6 +59,8 @@ export default function Dashboard() {
   const [filters, setFilters] = useState(initialFilters);
   const [positionFilter, setPositionFilter] = useState('all');
   const [selectedMetric, setSelectedMetric] = useState('metaScore');
+  const [dataSourceMode, setDataSourceMode] = useState('general');
+  const [tableDensity, setTableDensity] = useState(getInitialTableDensity);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState('');
@@ -55,7 +71,8 @@ export default function Dashboard() {
     setError('');
 
     try {
-      const data = refresh ? await refreshHeroMeta() : await getHeroMeta();
+      const params = { scoreProfile: filters.scoreProfile };
+      const data = refresh ? await refreshHeroMeta(params) : await getHeroMeta(params);
       setPayload(data);
     } catch (requestError) {
       setError(requestError.message);
@@ -66,7 +83,11 @@ export default function Dashboard() {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [filters.scoreProfile]);
+
+  useEffect(() => {
+    window.localStorage.setItem('dmi-table-density', tableDensity);
+  }, [tableDensity]);
 
   const filteredHeroes = useMemo(() => {
     const heroes = payload?.heroes || [];
@@ -129,10 +150,10 @@ export default function Dashboard() {
     <main className="dashboard">
       <header className="hero-header">
         <div>
-          <p className="eyebrow">OpenDota API + analise propria</p>
+          <p className="eyebrow">Public OpenDota-based analytics</p>
           <h1>DotaMeta Insights</h1>
           <p>
-            Hero meta dashboard based on public Dota 2 data
+            General Hero Meta dashboard with derived indicators and position inference.
           </p>
           <span className="header-note">
             Posicoes inferidas por heuristica de roles da OpenDota. Dados reais por partida
@@ -166,6 +187,28 @@ export default function Dashboard() {
         />
       ) : (
         <>
+          <section className="source-mode-panel">
+            <div className="section-heading">
+              <div>
+                <h2>Data Source Mode</h2>
+                <p>Choose between current public data and a planned competitive analytics mode.</p>
+              </div>
+            </div>
+            <div className="metric-tabs source-tabs" role="tablist" aria-label="Data source mode selector">
+              {dataSourceModes.map(([mode, label]) => (
+                <button
+                  key={mode}
+                  className={dataSourceMode === mode ? 'active' : ''}
+                  type="button"
+                  onClick={() => setDataSourceMode(mode)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <DataSourceNotice mode={dataSourceMode} />
+          </section>
+
           <section className="meta-overview">
             <div className="section-heading">
               <div>
@@ -308,8 +351,10 @@ export default function Dashboard() {
             onChange={setFilters}
             positionFilter={positionFilter}
             onPositionChange={setPositionFilter}
+            tableDensity={tableDensity}
+            onTableDensityChange={setTableDensity}
           />
-          <HeroTable heroes={filteredHeroes} />
+          <HeroTable heroes={filteredHeroes} tableDensity={tableDensity} sortBy={filters.sortBy} />
         </>
       )}
     </main>

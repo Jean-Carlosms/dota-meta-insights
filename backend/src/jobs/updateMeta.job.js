@@ -3,21 +3,21 @@ import { isCacheValid, readCache, writeCache } from '../services/cache.service.j
 import { buildMetaPayload } from '../services/metaScore.service.js';
 import { createHttpError } from '../middlewares/error.middleware.js';
 
-export async function getHeroMeta({ forceRefresh = false } = {}) {
+export async function getHeroMeta({ forceRefresh = false, scoreProfile = 'balanced' } = {}) {
   const cached = await readCache();
 
   if (!forceRefresh && isCacheValid(cached)) {
-    return buildMetaPayload(cached.data, cached.updatedAt);
+    return buildMetaPayload(cached.data, cached.updatedAt, { scoreProfile });
   }
 
   try {
     const rawHeroes = await fetchHeroStats();
     const freshCache = await writeCache(rawHeroes);
 
-    return buildMetaPayload(freshCache.data, freshCache.updatedAt);
+    return buildMetaPayload(freshCache.data, freshCache.updatedAt, { scoreProfile });
   } catch (error) {
     if (cached?.data?.length) {
-      const payload = buildMetaPayload(cached.data, cached.updatedAt);
+      const payload = buildMetaPayload(cached.data, cached.updatedAt, { scoreProfile });
 
       return {
         ...payload,

@@ -20,9 +20,13 @@
 ## Phase 3 - STRATZ GraphQL
 
 - Integrate STRATZ GraphQL API with token configuration.
+- Add high MMR filter.
+- Add recent period filter.
 - Replace or validate position heuristic with real match-level position data.
+- Add pro/high-MMR comparison mode.
 - Add real lane advantage.
 - Add real pick/ban contest rate.
+- Add real lane/radiant/dire/pick phase columns from STRATZ or another reliable source.
 - Add patch-aware queries.
 - Add rank/bracket-aware queries.
 - Keep OpenDota fallback behavior documented.

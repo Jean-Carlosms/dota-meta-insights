@@ -2,6 +2,15 @@ const tiers = ['all', 'S', 'A', 'B', 'C', 'D'];
 const attributes = ['all', 'str', 'agi', 'int'];
 const attackTypes = ['all', 'Melee', 'Ranged'];
 const minimumMatchesOptions = ['0', '500', '1000', '5000', '10000'];
+const tableDensityOptions = [
+  ['comfortable', 'Comfortable'],
+  ['compact', 'Compact']
+];
+const scoreProfileOptions = [
+  ['balanced', 'Balanced'],
+  ['winrate_focused', 'Win Rate Focused'],
+  ['confidence_focused', 'Confidence Focused']
+];
 const positions = [
   ['all', 'Todas as posicoes'],
   ['carry', 'Carry'],
@@ -11,7 +20,14 @@ const positions = [
   ['hard_support', 'Hard Support']
 ];
 
-export default function Filters({ filters, onChange, positionFilter, onPositionChange }) {
+export default function Filters({
+  filters,
+  onChange,
+  positionFilter,
+  onPositionChange,
+  tableDensity,
+  onTableDensityChange
+}) {
   function updateFilter(key, value) {
     onChange({
       ...filters,
@@ -102,6 +118,17 @@ export default function Filters({ filters, onChange, positionFilter, onPositionC
         </label>
 
         <label>
+          Score Profile
+          <select value={filters.scoreProfile} onChange={(event) => updateFilter('scoreProfile', event.target.value)}>
+            {scoreProfileOptions.map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label>
           Minimum Matches
           <select
             value={filters.minimumMatches}
@@ -110,6 +137,17 @@ export default function Filters({ filters, onChange, positionFilter, onPositionC
             {minimumMatchesOptions.map((value) => (
               <option key={value} value={value}>
                 {new Intl.NumberFormat('pt-BR').format(Number(value))}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label>
+          Table Density
+          <select value={tableDensity} onChange={(event) => onTableDensityChange(event.target.value)}>
+            {tableDensityOptions.map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
               </option>
             ))}
           </select>

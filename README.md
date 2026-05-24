@@ -14,6 +14,8 @@ DotaMeta Insights e um dashboard de portfolio para analisar o meta de herois de 
 - Custom Meta Score based on win rate, pick rate and match volume.
 - Position filter using explicit heuristics from OpenDota `roles`.
 - Filters by hero name, tier, position, primary attribute, attack type and sort metric.
+- Compact competitive table with density control, grouped columns and inline metric bars.
+- Data Source Mode selector for General Meta and Competitive Meta Preview.
 - Recharts visualizations:
   - Top 20 compact ranking by active metric.
   - Top 10 heroes by Meta Score.
@@ -162,6 +164,10 @@ STRATZ_API_TOKEN=
 
 Returns all processed heroes with Meta Score, tier, inferred positions, confidence and sample size.
 
+Optional query params:
+
+- `scoreProfile=balanced|winrate_focused|confidence_focused`
+
 ### GET /api/heroes/meta/refresh
 
 Forces a new OpenDota request, updates the local cache and returns processed data.
@@ -198,6 +204,10 @@ Returns tier distribution:
 
 Returns one hero by id. Unknown ids return `404`.
 
+### GET /api/meta/source-info
+
+Returns data source metadata for the current General Meta mode and the planned Competitive Meta Preview mode.
+
 ### GET /api/heroes/metrics
 
 Returns the main dashboard metric leaders:
@@ -217,11 +227,17 @@ Returns the main dashboard metric leaders:
 
 ## Meta Score Formula
 
+The dashboard supports analytical score profiles. They change score weighting, not the data source.
+
+Profiles:
+
+- `balanced`: win rate 50%, pick rate 20%, confidence 20%, volume 10%.
+- `winrate_focused`: win rate 65%, pick rate 15%, confidence 15%, volume 5%.
+- `confidence_focused`: win rate 40%, pick rate 20%, confidence 30%, volume 10%.
+
 ```text
 Meta Score =
-(normalizedWinRate * 0.55) +
-(normalizedPickRate * 0.30) +
-(normalizedVolume * 0.15)
+weighted normalized metrics by selected score profile
 ```
 
 The score is scaled from 0 to 100.
@@ -272,6 +288,32 @@ The project adds a small analytics layer on top of OpenDota data. These fields a
 
 Dota2ProTracker was used only as product inspiration for dense competitive analysis patterns such as compact metric tabs, ranking charts, filters and table density. This project does not scrape it, copy its CSS/HTML, or use its assets.
 
+## Data Accuracy and Competitive Meta
+
+OpenDota-based data is useful for general/public analytics and portfolio demonstration. It is not the same as a high-MMR/pro meta dataset.
+
+Dota2ProTracker is more representative of high-MMR/pro meta because it focuses on 7000+ MMR/pro-style data, recent windows, positions and enriched context. This project does not scrape Dota2ProTracker and does not copy its data.
+
+Current modes:
+
+- `General Meta`: active mode based on public OpenDota hero statistics.
+- `Competitive Meta Preview`: planned mode for future high-MMR/pro analytics. It currently shows a notice and does not invent competitive data.
+
+Future work should use STRATZ GraphQL or another reliable source for high-MMR/pro segmentation, patch windows, real positions and recent-period filters.
+
+## Compact Competitive Table
+
+The main hero table is optimized for dense meta reading:
+
+- `Compact` and `Comfortable` density modes.
+- Grouped headers for Hero, Meta Stats, Reliability and Classification.
+- Hero icons with compact identity cells.
+- Condensed positions and roles with native tooltips.
+- Inline CSS mini bars for matches, pick rate, Meta Score and confidence.
+- Semantic metric colors for high, medium and low values.
+
+Dota2ProTracker is used only as a product reference for competitive dashboard density. No layout, CSS, HTML, assets or data are copied.
+
 ## Error Format
 
 API errors follow this shape:
@@ -298,6 +340,7 @@ Latest local audit in this round:
 ## Known Limitations
 
 - OpenDota remains the primary data source.
+- Competitive Meta Preview is not integrated yet.
 - No scraping is used.
 - Hero images use public asset URLs associated with OpenDota/Steam CDN data.
 - No private data is used.
@@ -311,7 +354,9 @@ Latest local audit in this round:
 ## Roadmap
 
 - Integrate STRATZ GraphQL for real position data.
+- Add high MMR/pro source mode.
 - Add patch and rank filters.
+- Add recent period filters.
 - Add temporal trend history.
 - Add real pick/ban and lane advantage data.
 - Add hero icons from a safe source.

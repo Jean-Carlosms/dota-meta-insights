@@ -877,6 +877,7 @@ h1,
 }
 
 .meta-overview,
+.source-mode-panel,
 .charts-section,
 .position-leaders {
   margin-bottom: 24px;
@@ -1070,6 +1071,198 @@ tbody tr:hover td {
   gap: 8px;
   margin: 0;
   padding-left: 18px;
+}
+
+.data-source-notice {
+  border: 1px solid #213149;
+  border-radius: 8px;
+  padding: 16px;
+  background: linear-gradient(180deg, rgba(17, 27, 43, 0.96), rgba(12, 20, 34, 0.96));
+}
+
+.data-source-notice strong {
+  display: block;
+  color: #f3f8ff;
+}
+
+.data-source-notice p {
+  max-width: 980px;
+  margin: 8px 0 0;
+  color: #8ea4bf;
+  line-height: 1.6;
+}
+
+.data-source-notice.preview {
+  border-color: #7c4a16;
+  background: linear-gradient(180deg, rgba(36, 24, 13, 0.96), rgba(18, 18, 24, 0.96));
+}
+
+.source-tabs {
+  margin-bottom: 10px;
+}
+
+.meta-table {
+  min-width: 1420px;
+}
+
+.compact-table th,
+.compact-table td {
+  padding: 8px 10px;
+  font-size: 0.78rem;
+  vertical-align: middle;
+}
+
+.comfortable-table th,
+.comfortable-table td {
+  padding: 12px 14px;
+}
+
+.compact-table .table-group-row th {
+  padding: 6px 10px;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+}
+
+.compact-table .tier-badge {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  font-size: 0.76rem;
+}
+
+.compact-table .hero-name-cell {
+  gap: 8px;
+  min-width: 210px;
+}
+
+.compact-table .hero-icon {
+  width: 34px;
+  height: 23px;
+  border-radius: 5px;
+}
+
+.compact-table .hero-code {
+  margin-top: 1px;
+  font-size: 0.68rem;
+}
+
+.compact-position-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 190px;
+  white-space: nowrap;
+}
+
+.compact-position-cell span:last-child {
+  overflow: hidden;
+  color: #647895;
+  font-size: 0.7rem;
+  text-overflow: ellipsis;
+}
+
+.role-list.dense {
+  flex-wrap: nowrap;
+  gap: 4px;
+  max-width: 210px;
+  overflow: hidden;
+}
+
+.role-list.dense span {
+  padding: 3px 6px;
+  font-size: 0.68rem;
+  white-space: nowrap;
+}
+
+.metric-bar {
+  min-width: 86px;
+}
+
+.metric-bar-value {
+  color: #d7e2ef;
+  font-size: 0.76rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.metric-bar-track {
+  height: 4px;
+  margin-top: 5px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #172337;
+}
+
+.metric-bar-track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #647895;
+}
+
+.metric-bar-good .metric-bar-track span,
+.metric-good {
+  color: #86efac;
+}
+
+.metric-bar-good .metric-bar-track span {
+  background: #22c55e;
+}
+
+.metric-bar-mid .metric-bar-track span,
+.metric-mid {
+  color: #fde68a;
+}
+
+.metric-bar-mid .metric-bar-track span {
+  background: #eab308;
+}
+
+.metric-bar-bad .metric-bar-track span,
+.metric-bad,
+.metric-negative {
+  color: #fca5a5;
+}
+
+.metric-bar-bad .metric-bar-track span {
+  background: #ef4444;
+}
+
+.metric-bar-neutral .metric-bar-track span,
+.metric-neutral {
+  color: #a9bdd5;
+}
+
+.metric-positive {
+  color: #86efac;
+}
+
+.metric-value {
+  font-weight: 900;
+}
+
+th.active-sort {
+  color: #f3f8ff;
+  background: rgba(34, 211, 238, 0.12);
+}
+
+th.active-sort::after {
+  content: " sorted";
+  margin-left: 4px;
+  color: #67e8f9;
+  font-size: 0.62rem;
+  letter-spacing: 0;
+  text-transform: lowercase;
+}
+
+.compact-table .position-badge {
+  padding: 3px 7px;
+  font-size: 0.68rem;
+}
+
+.compact-table .sample-pill {
+  padding: 3px 7px;
+  font-size: 0.68rem;
 }
 
 .hero-chart-tooltip {
