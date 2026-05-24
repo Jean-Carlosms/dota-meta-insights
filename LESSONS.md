@@ -1,0 +1,65 @@
+# Lessons Learned
+
+## Consumo de API publica
+
+O backend centraliza a chamada para a OpenDota API em um servico dedicado. Isso facilita tratar timeout, falhas de rede e mudancas futuras no endpoint.
+
+## Cache local
+
+O cache em JSON reduz chamadas repetidas para a API externa e melhora a experiencia local. A validade de 6 horas equilibra atualizacao e simplicidade.
+
+## Normalizacao de dados
+
+Win rate, pick rate e volume usam escalas diferentes. A normalizacao coloca esses valores na mesma base antes de combinar tudo em um score unico.
+
+## Criacao de score analitico
+
+O Meta Score transforma dados brutos em uma leitura mais direta do meta. A formula da mais peso ao win rate, mas tambem considera popularidade e volume para evitar conclusoes isoladas.
+
+## Dashboard em React
+
+O frontend separa filtros, cards, tabela e badges em componentes pequenos. Isso deixa a tela principal mais facil de manter e evoluir.
+
+## Separacao backend/frontend
+
+A API Express fica responsavel por dados, cache e calculos. O React fica responsavel por visualizacao, filtros e experiencia de uso.
+
+## Roles de heroi vs posicao real
+
+As `roles` da OpenDota descrevem caracteristicas gerais do heroi, como Carry, Support ou Disabler. Elas nao dizem em qual posicao o heroi foi jogado em uma partida especifica.
+
+## Heuristica inicial de classificacao
+
+O filtro por posicao usa uma heuristica simples baseada em roles. Isso e util para um MVP de portfolio, mas nao deve ser tratado como precisao estatistica de posicao real.
+
+## Limitacoes de dados publicos
+
+Dados publicos permitem criar uma boa leitura inicial de meta, mas nem sempre incluem contexto de patch, rank, lane, funcao, draft ou build. Essas limitacoes devem aparecer no produto e na documentacao.
+
+## Preparacao para APIs avancadas
+
+A estrutura `stratz.service.js` foi criada para uma futura integracao com STRATZ GraphQL API. Essa etapa podera enriquecer o projeto com posicoes reais por partida, trends, filtros mais granulares e historico.
+
+## Graficos em dashboard React
+
+Recharts permite transformar o payload ja carregado pelo Dashboard em graficos responsivos sem criar chamadas extras de API por componente.
+
+## Endpoints derivados
+
+Rankings, distribuicao por tier e melhores por posicao podem ser calculados a partir do mesmo payload processado. Isso reduz duplicacao e evita chamadas desnecessarias para a OpenDota.
+
+## Confiabilidade de amostra
+
+Win rate e Meta Score ficam mais faceis de interpretar quando acompanhados por volume. `confidenceScore` e `sampleSizeLabel` ajudam a separar sinais fortes de amostras pequenas.
+
+## Score analitico vs dado bruto
+
+Meta Score e uma leitura criada pelo projeto. Matches, wins, win rate e roles sao derivados dos dados publicos da OpenDota. Manter essa separacao clara evita fingir precisao que a fonte ainda nao entrega.
+
+## Limitacao de API publica
+
+APIs publicas sao otimas para MVP e portfolio, mas nem sempre trazem contexto suficiente para patch, rank, lane, posicao real, counters e builds. Esses pontos ficam preparados para integracoes futuras.
+
+## Auditoria de dependencias
+
+O backend auditou sem vulnerabilidades. O frontend apresentou 2 vulnerabilidades moderadas no caminho `vite -> esbuild`. A correcao automatica exige `npm audit fix --force`, que instalaria uma versao maior e potencialmente quebravel do Vite, entao a recomendacao atual e planejar upgrade controlado.
