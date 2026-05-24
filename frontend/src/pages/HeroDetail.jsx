@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import HeroPositionBadge from '../components/HeroPositionBadge.jsx';
 import HeroTierBadge from '../components/HeroTierBadge.jsx';
+import HeroImage from '../components/HeroImage.jsx';
 import StatusMessage from '../components/StatusMessage.jsx';
 import { getHeroMeta } from '../services/api.js';
 
@@ -90,17 +91,20 @@ export default function HeroDetail() {
   return (
     <main className="dashboard">
       <header className="detail-header">
-        <div>
-          <Link className="back-link" to="/">Back to dashboard</Link>
-          <h1>{hero.localizedName}</h1>
-          <p>
-            Hero profile based on public OpenDota data, custom analytics, and inferred positions.
-          </p>
-          <div className="detail-badges">
-            <HeroTierBadge tier={hero.tier} />
-            {(hero.positions || []).map((position) => (
-              <HeroPositionBadge key={position} position={position} />
-            ))}
+        <div className="detail-hero-layout">
+          <HeroImage hero={hero} variant="image" className="hero-image" />
+          <div>
+            <Link className="back-link" to="/">Back to dashboard</Link>
+            <h1>{hero.localizedName}</h1>
+            <p>
+              Hero profile based on public OpenDota data, custom analytics, and inferred positions.
+            </p>
+            <div className="detail-badges">
+              <HeroTierBadge tier={hero.tier} />
+              {(hero.positions || []).map((position) => (
+                <HeroPositionBadge key={position} position={position} />
+              ))}
+            </div>
           </div>
         </div>
       </header>

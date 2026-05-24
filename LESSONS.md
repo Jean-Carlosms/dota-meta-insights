@@ -79,3 +79,11 @@ Quando a API publica nao entrega pick/ban, lane advantage ou posicao real, o pro
 ## Dashboards densos para analise competitiva
 
 Dashboards competitivos precisam equilibrar densidade e legibilidade: filtros compactos, ranking principal, tabela com grupos de colunas e notas de dados ajudam o usuario a entender o que e medido, derivado ou planejado.
+
+## Assets externos com fallback
+
+Os icones e imagens dos herois usam caminhos publicos retornados pela OpenDota. O frontend precisa lidar com falha de imagem e ausencia de URL usando fallback textual para manter a interface estavel.
+
+## Por que nao salvar imagens no repositorio
+
+Manter imagens externas fora do repositorio evita aumentar o tamanho do projeto e reduz risco de versionar assets que podem mudar de origem/licenca. O projeto guarda apenas URLs derivadas dos dados publicos.

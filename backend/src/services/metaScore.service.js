@@ -3,6 +3,7 @@ import {
   getPrimaryPosition,
   inferHeroPositions
 } from './position.service.js';
+import { buildHeroAssetUrl } from './heroAssets.service.js';
 
 const PICK_KEYS = [
   '1_pick',
@@ -137,6 +138,10 @@ export function buildMetaPayload(rawHeroes, updatedAt) {
         id: hero.id,
         name: hero.name,
         localizedName: hero.localized_name,
+        img: hero.img || null,
+        icon: hero.icon || null,
+        imageUrl: buildHeroAssetUrl(hero.img),
+        iconUrl: buildHeroAssetUrl(hero.icon),
         primaryAttr: hero.primary_attr,
         attackType: hero.attack_type,
         roles: Array.isArray(hero.roles) ? hero.roles : [],

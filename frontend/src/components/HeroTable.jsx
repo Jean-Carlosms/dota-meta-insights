@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import HeroTierBadge from './HeroTierBadge.jsx';
 import HeroPositionBadge from './HeroPositionBadge.jsx';
+import HeroImage from './HeroImage.jsx';
 import StatusMessage from './StatusMessage.jsx';
 
 function formatNumber(value) {
@@ -51,10 +52,15 @@ export default function HeroTable({ heroes }) {
                 <HeroTierBadge tier={hero.tier} />
               </td>
               <td>
-                <Link className="hero-link" to={`/heroes/${hero.id}`}>
-                  <strong>{hero.localizedName}</strong>
-                </Link>
-                <span className="hero-code">{hero.name}</span>
+                <div className="hero-name-cell">
+                  <HeroImage hero={hero} className="hero-icon" />
+                  <div>
+                    <Link className="hero-link" to={`/heroes/${hero.id}`}>
+                      <strong>{hero.localizedName}</strong>
+                    </Link>
+                    <span className="hero-code">{hero.name}</span>
+                  </div>
+                </div>
               </td>
               <td>
                 <div className="position-stack">

@@ -5,6 +5,7 @@
 - Keep OpenDota as the main public data source.
 - Keep Meta Score, position heuristic, charts and hero details stable.
 - Add real screenshots to `docs/screenshots`.
+- Add optional local cache for hero assets.
 - Add endpoint integration tests.
 - Add frontend component tests.
 
@@ -32,6 +33,7 @@
 - Add temporal trend analysis.
 - Add trend charts.
 - Add builds by position.
+- Add image/build visual support by position.
 - Add hero icons from a safe source.
 - Add matchups.
 - Add counters, synergies and best allies.

@@ -7,6 +7,7 @@ import {
   XAxis,
   YAxis
 } from 'recharts';
+import HeroImage from '../HeroImage.jsx';
 
 const METRIC_FORMATTERS = {
   metaScore: (value) => Number(value).toFixed(1),
@@ -31,6 +32,7 @@ export default function HeroMetricRankingChart({ heroes, metric, metricLabel }) 
     .slice(0, 20)
     .map((hero) => ({
       hero: abbreviateHeroName(hero.localizedName),
+      heroData: hero,
       fullName: hero.localizedName,
       value: hero[metric] || 0,
       tier: hero.tier
@@ -62,14 +64,23 @@ export default function HeroMetricRankingChart({ heroes, metric, metricLabel }) 
           />
           <Tooltip
             cursor={{ fill: 'rgba(95, 179, 255, 0.08)' }}
-            contentStyle={{
-              background: '#101827',
-              border: '1px solid #25354a',
-              borderRadius: '8px',
-              color: '#e8f1fb'
+            content={({ active, payload }) => {
+              if (!active || !payload?.length) {
+                return null;
+              }
+
+              const item = payload[0].payload;
+
+              return (
+                <div className="hero-chart-tooltip">
+                  <HeroImage hero={item.heroData} className="hero-icon" />
+                  <div>
+                    <strong>{item.fullName}</strong>
+                    <span>{metricLabel}: {formatter(item.value)}</span>
+                  </div>
+                </div>
+              );
             }}
-            formatter={(value) => [formatter(value), metricLabel]}
-            labelFormatter={(label, items) => items?.[0]?.payload?.fullName || label}
           />
           <Bar dataKey="value" fill="#34d399" radius={[0, 7, 7, 0]} />
         </BarChart>

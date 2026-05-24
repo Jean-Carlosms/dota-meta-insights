@@ -21,6 +21,7 @@ DotaMeta Insights e um dashboard de portfolio para analisar o meta de herois de 
   - Tier distribution.
   - Best hero by inferred position.
 - Hero detail page at `/heroes/:heroId`.
+- Hero icons and visual hero detail page using public asset paths returned by OpenDota.
 - Backend helper endpoints for rankings, positions, tiers and hero lookup.
 - `confidenceScore` and `sampleSizeLabel` to communicate sample reliability.
 - `ratingScore`, `contestRateApprox` and `lanePresenceApprox` as documented DotaMeta indicators.
@@ -74,6 +75,17 @@ dota-meta-insights/
 The backend fetches `https://api.opendota.com/api/heroStats`, caches the raw payload locally for 6 hours, enriches heroes with analytics fields, and exposes derived endpoints.
 
 The frontend consumes the local API and renders the dashboard, charts, filters, table and hero detail page.
+
+## Hero Assets
+
+OpenDota `heroStats` includes public hero asset paths such as `img` and `icon`. The backend keeps those raw fields and also exposes absolute URLs:
+
+- `img`
+- `icon`
+- `imageUrl`
+- `iconUrl`
+
+Relative paths are resolved against the public Steam CDN host used by the OpenDota asset paths. If an asset is missing, the API returns `null` and the frontend shows a text fallback. No scraping is used and hero images are not stored in this repository.
 
 ## Screenshots
 
@@ -287,6 +299,7 @@ Latest local audit in this round:
 
 - OpenDota remains the primary data source.
 - No scraping is used.
+- Hero images use public asset URLs associated with OpenDota/Steam CDN data.
 - No private data is used.
 - No database is used yet.
 - Position is inferred by heuristic, not measured from real matches.
